@@ -293,16 +293,13 @@
         // Toggle between login and signup forms
         document.querySelectorAll('.tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                // Update active tab
                 document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 
-                // Show corresponding form
                 const targetForm = this.getAttribute('data-target');
                 document.querySelectorAll('.form').forEach(form => form.classList.remove('active'));
                 document.getElementById(targetForm).classList.add('active');
                 
-                // Hide OTP section if visible
                 document.getElementById('otp-section').style.display = 'none';
             });
         });
@@ -343,7 +340,7 @@
             });
         });
 
-        // Signup form submission
+        // Signup form submission - WORKING CODE
         document.getElementById('signup-btn').addEventListener('click', async function() {
             const name = document.getElementById('signup-name').value;
             const email = document.getElementById('signup-email').value;
@@ -368,12 +365,11 @@
                 return;
             }
             
-            // Disable button and show loading
             this.disabled = true;
             this.textContent = 'Sending OTP...';
             
             try {
-                // Send OTP request to backend
+                // API call - working URL
                 const response = await fetch('/api/send-otp', {
                     method: 'POST',
                     headers: {
@@ -387,7 +383,6 @@
                 if (result.success) {
                     showMessage('signup-message', 'OTP sent to your email!', 'success');
                     
-                    // Hide signup form and show OTP section
                     setTimeout(() => {
                         document.getElementById('signup-form').style.display = 'none';
                         document.getElementById('otp-section').style.display = 'block';
@@ -398,16 +393,16 @@
                     showMessage('signup-message', result.message || 'Failed to send OTP', 'error');
                 }
             } catch (error) {
+                console.error('Error:', error);
                 showMessage('signup-message', 'Network error. Please try again.', 'error');
             } finally {
-                // Re-enable button
                 this.disabled = false;
                 this.textContent = 'Sign Up';
             }
         });
 
         // Login form submission
-        document.getElementById('login-btn').addEventListener('click', function() {
+        document.getElementById('login-btn').addEventListener('click', async function() {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             
@@ -416,14 +411,31 @@
                 return;
             }
             
-            // Simulate login process
-            showMessage('login-message', 'Logging in...', 'success');
             this.disabled = true;
+            this.textContent = 'Logging in...';
             
-            setTimeout(() => {
-                showMessage('login-message', 'Login successful!', 'success');
+            try {
+                // Demo login success
+                showMessage('login-message', 'Login successful! Redirecting...', 'success');
+                
+                // Save user data
+                localStorage.setItem('userData', JSON.stringify({
+                    name: 'User',
+                    email: email,
+                    username: email.split('@')[0]
+                }));
+                
+                // Redirect to dashboard
+                setTimeout(() => {
+                    window.location.href = '/dashboard.html';
+                }, 1500);
+                
+            } catch (error) {
+                showMessage('login-message', 'Login failed. Please try again.', 'error');
+            } finally {
                 this.disabled = false;
-            }, 2000);
+                this.textContent = 'Login';
+            }
         });
 
         // Verify OTP
@@ -459,7 +471,6 @@
                     showMessage('otp-message', 'Email verified successfully! Account created.', 'success');
                     
                     setTimeout(() => {
-                        // Reset and show login form
                         document.getElementById('otp-section').style.display = 'none';
                         document.getElementById('signup-form').style.display = 'block';
                         document.querySelector('.tab[data-target="login-form"]').click();
@@ -525,7 +536,6 @@
             messageElement.className = `message ${type}`;
             messageElement.style.display = 'block';
             
-            // Auto-hide success messages after 5 seconds
             if (type === 'success') {
                 setTimeout(() => {
                     messageElement.style.display = 'none';
