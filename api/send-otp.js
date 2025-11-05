@@ -91,7 +91,6 @@ module.exports = async (req, res) => {
     await transporter.sendMail(mailOptions);
 
     // In production, store OTP in database with expiry
-    // For now, we'll just return success
     console.log(`OTP ${otp} sent to ${email}`);
 
     res.status(200).json({ 
