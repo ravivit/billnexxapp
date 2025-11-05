@@ -1,4 +1,4 @@
-const users = []; // Temporary storage - production me database use karna
+const users = []; // Temporary storage
 
 module.exports = async (req, res) => {
   // Set CORS headers
@@ -54,18 +54,3 @@ module.exports = async (req, res) => {
     });
   }
 };
-
-
-
-// Login success par
-if (result.success) {
-    showMessage('login-message', 'Login successful! Redirecting...', 'success');
-    
-    // User data save karo
-    localStorage.setItem('userData', JSON.stringify(result.user));
-    
-    // Dashboard redirect
-    setTimeout(() => {
-        window.location.href = '/dashboard.html';
-    }, 1500);
-}
