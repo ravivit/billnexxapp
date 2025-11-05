@@ -438,7 +438,7 @@
             }
         });
 
-        // Verify OTP
+        // Verify OTP - UPDATED CODE WITH REGISTER API
         document.getElementById('verify-otp-btn').addEventListener('click', async function() {
             const otpInputs = document.querySelectorAll('.otp-input');
             let otp = '';
@@ -467,19 +467,46 @@
                 
                 const result = await response.json();
                 
+                // UPDATED CODE - REGISTER USER AFTER OTP VERIFICATION
                 if (result.success) {
-                    showMessage('otp-message', 'Email verified successfully! Account created.', 'success');
+                    showMessage('otp-message', 'Email verified successfully! Creating account...', 'success');
                     
-                    setTimeout(() => {
-                        document.getElementById('otp-section').style.display = 'none';
-                        document.getElementById('signup-form').style.display = 'block';
-                        document.querySelector('.tab[data-target="login-form"]').click();
-                        resetForms();
-                        showMessage('login-message', 'Account created successfully! Please login.', 'success');
-                    }, 2000);
+                    // Register user after OTP verification
+                    try {
+                        const registerResponse = await fetch('/api/register', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                name: document.getElementById('signup-name').value,
+                                email: email,
+                                username: document.getElementById('signup-username').value,
+                                mobile: document.getElementById('signup-mobile').value,
+                                password: document.getElementById('signup-password').value
+                            })
+                        });
+                        
+                        const registerResult = await registerResponse.json();
+                        
+                        if (registerResult.success) {
+                            showMessage('otp-message', 'Account created successfully!', 'success');
+                            // Redirect to login
+                            setTimeout(() => {
+                                document.getElementById('otp-section').style.display = 'none';
+                                document.getElementById('signup-form').style.display = 'block';
+                                document.querySelector('.tab[data-target="login-form"]').click();
+                                resetForms();
+                                showMessage('login-message', 'Account created! Please login.', 'success');
+                            }, 2000);
+                        } else {
+                            showMessage('otp-message', registerResult.message || 'Account creation failed', 'error');
+                        }
+                    } catch (error) {
+                        showMessage('otp-message', 'Account creation failed - Network error', 'error');
+                    }
                 } else {
                     showMessage('otp-message', result.message || 'Invalid OTP', 'error');
                 }
+                
             } catch (error) {
                 showMessage('otp-message', 'Network error. Please try again.', 'error');
             } finally {
