@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Billnexx</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f7fa;
+            min-height: 100vh;
+        }
+
+        .navbar {
+            background: linear-gradient(135deg, #1e88e5, #0d47a1);
+            color: white;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logout-btn {
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 1px solid rgba(255,255,255,0.3);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .welcome-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .welcome-section h1 {
+            color: #1e88e5;
+            margin-bottom: 1rem;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            border-left: 4px solid #1e88e5;
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-card h3 {
+            color: #1e88e5;
+            margin-bottom: 0.5rem;
+        }
+
+        .billing-section {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            color: #1e88e5;
+            margin-bottom: 1.5rem;
+            font-size: 1.5rem;
+        }
+
+        .billing-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .action-btn {
+            background: #1e88e5;
+            color: white;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: #1565c0;
+        }
+
+        .billing-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e88e5, #0d47a1);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .navbar {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="logo">Billnexx</div>
+        <div class="user-info">
+            <span>Welcome, <span id="user-name">User</span></span>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Welcome Section -->
+        <div class="welcome-section">
+            <h1>Welcome to Your Billing Dashboard</h1>
+            <p>Manage your invoices, payments, and billing information efficiently</p>
+        </div>
+
+        <!-- Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <h3>📊 Invoice Management</h3>
+                <p>Create, send, and track invoices with automated reminders</p>
+            </div>
+            <div class="feature-card">
+                <h3>💳 Payment Processing</h3>
+                <p>Accept payments online with multiple payment methods</p>
+            </div>
+            <div class="feature-card">
+                <h3>📈 Financial Reports</h3>
+                <p>Generate detailed financial reports and analytics</p>
+            </div>
+            <div class="feature-card">
+                <h3>👥 Client Management</h3>
+                <p>Manage client information and billing history</p>
+            </div>
+        </div>
+
+        <!-- Billing Section -->
+        <div class="billing-section">
+            <h2 class="section-title">Billing Actions</h2>
+            
+            <div class="billing-actions">
+                <button class="action-btn" onclick="createInvoice()">Create New Invoice</button>
+                <button class="action-btn" onclick="viewInvoices()">View All Invoices</button>
+                <button class="action-btn" onclick="manageClients()">Manage Clients</button>
+                <button class="action-btn" onclick="generateReport()">Generate Report</button>
+            </div>
+
+            <div class="billing-stats">
+                <div class="stat-card">
+                    <div class="stat-number" id="total-invoices">12</div>
+                    <div>Total Invoices</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number" id="pending-payments">3</div>
+                    <div>Pending Payments</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">₹85,420</div>
+                    <div>Total Revenue</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24</div>
+                    <div>Active Clients</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in
+        const userData = JSON.parse(localStorage.getItem('userData'));
+        
+        if (!userData) {
+            window.location.href = '/';
+        } else {
+            document.getElementById('user-name').textContent = userData.name || userData.username;
+        }
+
+        // Logout function
+        function logout() {
+            localStorage.removeItem('userData');
+            window.location.href = '/';
+        }
+
+        // Dashboard functions
+        function createInvoice() {
+            alert('Create Invoice feature will open here!');
+            // Redirect to invoice creation page
+        }
+
+        function viewInvoices() {
+            alert('Viewing all invoices...');
+            // Redirect to invoices page
+        }
+
+        function manageClients() {
+            alert('Opening client management...');
+            // Redirect to clients page
+        }
+
+        function generateReport() {
+            alert('Generating financial report...');
+            // Redirect to reports page
+        }
+
+        // Update stats (demo data)
+        function updateStats() {
+            // In real app, fetch from API
+            document.getElementById('total-invoices').textContent = '12';
+            document.getElementById('pending-payments').textContent = '3';
+        }
+
+        updateStats();
+    </script>
+</body>
+</html>
